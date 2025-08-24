@@ -16,7 +16,11 @@ export default function Controles({ onStart, onReset, isRunning }: ControlesProp
         onClick={onStart}>
         {isRunning ? 'stop' : 'start'}
       </Button>
-      <Button variant="secondary" size="lg">Reset</Button>
+      <Button
+        variant="secondary"
+        size="lg"
+        onClick={onReset}
+      >Reset</Button>
     </div>
   )
 }

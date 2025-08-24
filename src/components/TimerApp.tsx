@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 export default function TimerApp() {
@@ -15,10 +15,45 @@ export default function TimerApp() {
     setIsRunning(!isRunning);
   }
 
+  //this content can hold moving time 
+  const [timeLeft, setTimeLeft] = useState({ minutes: 25, seconds: 0 });
+
 
   const handleReset = () => {
     setIsRunning(false);
+    setTimeLeft({ minutes: 25, seconds: 0 })
   }
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+    if (isRunning) {
+      intervalId = setInterval(() => {
+        setTimeLeft((prev) => {
+          //if seconds is 0, next seconds change 59s
+          if (prev.seconds === 0) {
+
+            //if min is0, timer will be stopped
+            if (prev.minutes === 0) {
+              setIsRunning(false); //timer will stop
+              return prev;
+            }
+            //if timer is still runnning
+            return { minutes: prev.minutes - 1, seconds: 59 }
+          }
+          return { ...prev, seconds: prev.seconds - 1 };
+        })
+      }, 1000);
+    }
+
+    //cleanup関数
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    }
+
+  }, [isRunning]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
@@ -28,8 +63,8 @@ export default function TimerApp() {
           </CardTitle>
           <CardContent className="flex flex-col items-center gap-6">
             <TimerDisplay
-              minutes={25}
-              seconds={0} />
+              minutes={timeLeft.minutes}
+              seconds={timeLeft.seconds} />
             <Controles
               onStart={handleStart}
               onReset={handleReset}
