@@ -5,6 +5,10 @@ import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
 import { useState, useEffect } from "react";
 
+//タイマーのモードを表す型
+type Mode = 'work' | 'break';
+
+
 
 export default function TimerApp() {
   //this list can manage wheter the timer is runnning or not
@@ -23,7 +27,20 @@ export default function TimerApp() {
     setIsRunning(false);
     setTimeLeft({ minutes: 25, seconds: 0 })
   }
+  const [mode, setMode] = useState<Mode>('work');
 
+  //this function helps mode switch
+  const toggleMode = () => {
+    const newMode = mode === 'work' ? 'break' : 'work';
+    setMode(newMode);
+
+    setTimeLeft({
+      minutes: newMode === 'work' ? 25 : 5,
+      seconds: 0,
+    })
+
+    setIsRunning(false);
+  };
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
     if (isRunning) {
@@ -59,7 +76,7 @@ export default function TimerApp() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Working Time
+            {mode === 'work' ? 'Working Time' : 'Break Time'}
           </CardTitle>
           <CardContent className="flex flex-col items-center gap-6">
             <TimerDisplay
@@ -68,6 +85,7 @@ export default function TimerApp() {
             <Controles
               onStart={handleStart}
               onReset={handleReset}
+              onModetoggle={toggleMode}
               isRunning={isRunning}
             />
           </CardContent>
