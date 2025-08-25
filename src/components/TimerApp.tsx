@@ -55,6 +55,7 @@ export default function TimerApp() {
             //if min is0, timer will be stopped
             if (prev.minutes === 0) {
               setIsRunning(false); //timer will stop
+              toggleMode();
               return prev;
             }
             //if timer is still runnning
@@ -62,7 +63,7 @@ export default function TimerApp() {
           }
           return { ...prev, seconds: prev.seconds - 1 };
         })
-      }, 1000);
+      }, 1);
     }
 
     //cleanup関数
