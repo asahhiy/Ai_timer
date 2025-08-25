@@ -25,8 +25,11 @@ export default function TimerApp() {
 
   const handleReset = () => {
     setIsRunning(false);
-    setTimeLeft({ minutes: 25, seconds: 0 })
-  }
+    setTimeLeft({
+      minutes: mode === 'work' ? 25 : 5,
+      seconds: 0
+    })
+  };
   const [mode, setMode] = useState<Mode>('work');
 
   //this function helps mode switch
