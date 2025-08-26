@@ -6,6 +6,7 @@ import Controles from "./Controles";
 import MetadataUpdater from "./MetadataUpdater";
 import { useState, useEffect } from "react";
 import { playNotificationSound } from "@/utils/sound";
+import { useReward } from "react-rewards";
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
 
@@ -15,7 +16,9 @@ export default function TimerApp() {
   //this list can manage wheter the timer is runnning or not
   const [isRunning, setIsRunning] = useState(false);
 
+  //working time and break time management
   const [workDuration, setWorkDuration] = useState(25);
+  const [breakDuration, setBreakDuration] = useState(5);
 
   //reverse the boolean 
   const handleStart = () => {
@@ -29,7 +32,7 @@ export default function TimerApp() {
   const handleReset = () => {
     setIsRunning(false);
     setTimeLeft({
-      minutes: mode === 'work' ? workDuration : 5,
+      minutes: mode === 'work' ? workDuration : breakDuration,
       seconds: 0
     })
   };
@@ -41,7 +44,7 @@ export default function TimerApp() {
     setMode(newMode);
 
     setTimeLeft({
-      minutes: newMode === 'work' ? workDuration : 5,
+      minutes: newMode === 'work' ? workDuration : breakDuration,
       seconds: 0,
     })
 
@@ -101,23 +104,44 @@ export default function TimerApp() {
               isRunning={isRunning}
             />
           </CardContent>
-          <CardFooter className="flex justify-center gap-2 items-center ">
-            <label className="text-sm font-medium">working time</label>
-            <select value={workDuration} onChange={(e) => {
-              const newDuration = parseInt(e.target.value);
-              setWorkDuration(newDuration)
-              if (mode === 'work' && isRunning) {
-                setTimeLeft({ minutes: newDuration, seconds: 0 })
-                console.log('mode is work');
-              }
+          <CardFooter>
+            {/* 作業時間の指定*/}
+            <div className="flex items-center gap-2 mx-auto justify-evenly">
+              <label className="text-sm font-medium min-w-[4.5rem]">working time</label>
+              <select value={workDuration} onChange={(e) => {
+                const newDuration = parseInt(e.target.value);
+                setWorkDuration(newDuration)
+                if (mode === 'work' && isRunning) {
+                  setTimeLeft({ minutes: newDuration, seconds: 0 })
+                  console.log('mode is work');
+                }
 
-            }}
-              className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-            >
-              {[5, 10, 15, 30, 45, 60].map((minutes) => (
-                <option key={minutes} value={minutes}>{minutes}min</option>
-              ))}
-            </select>
+              }}
+                className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+              >
+                {[5, 10, 15, 25, 30, 45, 60].map((minutes) => (
+                  <option key={minutes} value={minutes}>{minutes}min</option>
+                ))}
+              </select>
+
+
+              {/* define user break time */}
+              <label className="text-sm font-medium min-w-[4.5rem]">break time</label>
+              <select value={breakDuration} onChange={(e) => {
+                const newDuration = parseInt(e.target.value);
+                setBreakDuration(newDuration)
+                if (mode === 'break' && isRunning) {
+                  setTimeLeft({ minutes: newDuration, seconds: 0 })
+                  console.log('mode is break');
+                }
+              }}
+                className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+              >
+                {[5, 10, 15].map((minutes) => (
+                  <option key={minutes} value={minutes}>{minutes}min</option>
+                ))}
+              </select>
+            </div>
           </CardFooter>
         </CardHeader>
       </Card >
