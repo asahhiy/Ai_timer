@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
 import { useState, useEffect } from "react";
-
+import { playNotificationSound } from "@/utils/sound";
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
 
@@ -56,6 +56,7 @@ export default function TimerApp() {
             if (prev.minutes === 0) {
               setIsRunning(false); //timer will stop
               toggleMode();
+              void playNotificationSound();
               return prev;
             }
             //if timer is still runnning
