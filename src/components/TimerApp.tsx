@@ -8,6 +8,7 @@ import MetadataUpdater from "./MetadataUpdater";
 import { useState, useEffect } from "react";
 import { playNotificationSound } from "@/utils/sound";
 import { useReward } from "react-rewards";
+
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
 
@@ -49,17 +50,14 @@ export default function TimerApp() {
   const toggleMode = () => {
     const newMode = mode === 'work' ? 'break' : 'work';
     setMode(newMode);
-
-    setIsRunning(false);
     console.log(isRunning);
     setTimeLeft({
       minutes: newMode === 'work' ? workDuration : breakDuration,
       seconds: 0,
-
     })
     console.log('newMode:', newMode);
     console.log('now workDuration:', workDuration, 'breakDuration', breakDuration);
-
+    setIsRunning(autoStart);
   };
 
 
@@ -74,13 +72,14 @@ export default function TimerApp() {
             //if min is0, timer will be stopped
             if (prev.minutes === 0) {
               setIsRunning(false); //timer will stop
-              toggleMode();
-
               void playNotificationSound();
               if (mode === 'work') {
 
                 void confetti();//effect on
               }
+              setTimeout(() => {
+                toggleMode();
+              }, 100)
               const newDuration = mode === 'work' ? breakDuration : workDuration;
               return { minutes: newDuration, seconds: 0 };
             }
@@ -138,7 +137,7 @@ export default function TimerApp() {
                   }
 
                 }}
-                  className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+                  className="p-2 cursor-pointer border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
                 >
                   {[5, 10, 15, 25, 30, 45, 60].map((minutes) => (
                     <option key={minutes} value={minutes}>{minutes}min</option>
@@ -147,8 +146,8 @@ export default function TimerApp() {
               </div>
 
               {/* define user break time */}
-              <div className="gap-2 justify-evenly items-center mx-auto">
-                <label className="text-sm font-medium min-w-[4.5rem] gap-2">break time</label>
+              <div className="gap-2 justify-between flex items-center w-full">
+                <label className="text-sm font-medium min-w-[4.5rem] gap-2">break  time</label>
                 <select value={breakDuration} onChange={(e) => {
                   const newDuration = parseInt(e.target.value);
                   setBreakDuration(newDuration)
@@ -157,7 +156,7 @@ export default function TimerApp() {
                     console.log('mode is break');
                   }
                 }}
-                  className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+                  className="p-2 cursor-pointer border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
                 >
                   {[5, 10, 15].map((minutes) => (
                     <option key={minutes} value={minutes}>{minutes}min</option>
@@ -165,11 +164,12 @@ export default function TimerApp() {
                 </select>
               </div>
 
-              <div className="gap-2 justify-evenly items-center mx-auto">
-                <label className="text-sm font-medium min-w-[4.5rem] gap-2">Auto Start</label>
+              <div className="flex items-center gap-2 w-full justify-between">
+                <label className="text-sm font-medium min-w-[4.5rem]">Auto Start</label>
                 <Switch
                   checked={autoStart}
                   onCheckedChange={() => setAutoStart(!autoStart)}
+                  className="cursor-pointer"
                 />
               </div>
             </div>
