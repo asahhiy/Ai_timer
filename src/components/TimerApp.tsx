@@ -1,6 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
+import { Switch } from "@radix-ui/react-switch";
 import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
 import MetadataUpdater from "./MetadataUpdater";
@@ -13,6 +14,12 @@ type Mode = 'work' | 'break';
 
 
 export default function TimerApp() {
+  const { reward: confetti } = useReward('confettiReward', 'confetti', {
+    elementCount: 100,
+    spread: 70,
+    decay: 0.93,
+    lifetime: 150,
+  })
   //this list can manage wheter the timer is runnning or not
   const [isRunning, setIsRunning] = useState(false);
 
@@ -20,6 +27,8 @@ export default function TimerApp() {
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
 
+
+  const [autoStart, setAutoStart] = useState(false);
   //reverse the boolean 
   const handleStart = () => {
     setIsRunning(!isRunning);
@@ -64,7 +73,12 @@ export default function TimerApp() {
             if (prev.minutes === 0) {
               setIsRunning(false); //timer will stop
               toggleMode();
+
               void playNotificationSound();
+              if (mode === 'work') {
+
+                void confetti();//effect on
+              }
               return prev;
             }
             //if timer is still runnning
@@ -86,6 +100,9 @@ export default function TimerApp() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <span id="confettiReward" className="
+        absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+        "/>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
@@ -106,7 +123,7 @@ export default function TimerApp() {
           </CardContent>
           <CardFooter>
             {/* 作業時間の指定*/}
-            <div className="flex items-center gap-2 mx-auto justify-evenly">
+            <div className="flex items-center gap-2 mx-auto justify-evenly flex-col">
               <label className="text-sm font-medium min-w-[4.5rem]">working time</label>
               <select value={workDuration} onChange={(e) => {
                 const newDuration = parseInt(e.target.value);
