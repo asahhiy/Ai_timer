@@ -50,12 +50,16 @@ export default function TimerApp() {
     const newMode = mode === 'work' ? 'break' : 'work';
     setMode(newMode);
 
+    setIsRunning(false);
+    console.log(isRunning);
     setTimeLeft({
       minutes: newMode === 'work' ? workDuration : breakDuration,
       seconds: 0,
-    })
 
-    setIsRunning(false);
+    })
+    console.log('newMode:', newMode);
+    console.log('now workDuration:', workDuration, 'breakDuration', breakDuration);
+
   };
 
 
@@ -77,14 +81,15 @@ export default function TimerApp() {
 
                 void confetti();//effect on
               }
-              return prev;
+              const newDuration = mode === 'work' ? breakDuration : workDuration;
+              return { minutes: newDuration, seconds: 0 };
             }
             //if timer is still runnning
             return { minutes: prev.minutes - 1, seconds: 59 }
           }
           return { ...prev, seconds: prev.seconds - 1 };
         })
-      }, 1);
+      }, 10);
     }
 
     //cleanup関数
@@ -127,7 +132,7 @@ export default function TimerApp() {
                 <select value={workDuration} onChange={(e) => {
                   const newDuration = parseInt(e.target.value);
                   setWorkDuration(newDuration)
-                  if (mode === 'work' && isRunning) {
+                  if (mode === 'work' && !isRunning) {
                     setTimeLeft({ minutes: newDuration, seconds: 0 })
                     console.log('mode is work');
                   }
@@ -162,7 +167,10 @@ export default function TimerApp() {
 
               <div className="gap-2 justify-evenly items-center mx-auto">
                 <label className="text-sm font-medium min-w-[4.5rem] gap-2">Auto Start</label>
-                <Switch />
+                <Switch
+                  checked={autoStart}
+                  onCheckedChange={() => setAutoStart(!autoStart)}
+                />
               </div>
             </div>
 
