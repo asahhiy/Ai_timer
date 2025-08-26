@@ -123,42 +123,50 @@ export default function TimerApp() {
           </CardContent>
           <CardFooter>
             {/* 作業時間の指定*/}
-            <div className="flex items-center gap-2 mx-auto justify-evenly flex-col">
-              <label className="text-sm font-medium min-w-[4.5rem]">working time</label>
-              <select value={workDuration} onChange={(e) => {
-                const newDuration = parseInt(e.target.value);
-                setWorkDuration(newDuration)
-                if (mode === 'work' && isRunning) {
-                  setTimeLeft({ minutes: newDuration, seconds: 0 })
-                  console.log('mode is work');
-                }
+            <div className="flex items-center flex-col mx-auto">
+              <div className="flex items-center gap-2 mx-auto justify-evenly ">
+                <label className="text-sm font-medium min-w-[4.5rem]">working time</label>
+                <select value={workDuration} onChange={(e) => {
+                  const newDuration = parseInt(e.target.value);
+                  setWorkDuration(newDuration)
+                  if (mode === 'work' && isRunning) {
+                    setTimeLeft({ minutes: newDuration, seconds: 0 })
+                    console.log('mode is work');
+                  }
 
-              }}
-                className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
-              >
-                {[5, 10, 15, 25, 30, 45, 60].map((minutes) => (
-                  <option key={minutes} value={minutes}>{minutes}min</option>
-                ))}
-              </select>
-
+                }}
+                  className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+                >
+                  {[5, 10, 15, 25, 30, 45, 60].map((minutes) => (
+                    <option key={minutes} value={minutes}>{minutes}min</option>
+                  ))}
+                </select>
+              </div>
 
               {/* define user break time */}
-              <label className="text-sm font-medium min-w-[4.5rem]">break time</label>
-              <select value={breakDuration} onChange={(e) => {
-                const newDuration = parseInt(e.target.value);
-                setBreakDuration(newDuration)
-                if (mode === 'break' && isRunning) {
-                  setTimeLeft({ minutes: newDuration, seconds: 0 })
-                  console.log('mode is break');
-                }
-              }}
-                className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
-              >
-                {[5, 10, 15].map((minutes) => (
-                  <option key={minutes} value={minutes}>{minutes}min</option>
-                ))}
-              </select>
+              <div className="gap-2 justify-evenly items-center mx-auto">
+                <label className="text-sm font-medium min-w-[4.5rem] gap-2">break time</label>
+                <select value={breakDuration} onChange={(e) => {
+                  const newDuration = parseInt(e.target.value);
+                  setBreakDuration(newDuration)
+                  if (mode === 'break' && isRunning) {
+                    setTimeLeft({ minutes: newDuration, seconds: 0 })
+                    console.log('mode is break');
+                  }
+                }}
+                  className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:outline-none focus:ring-blue-500"
+                >
+                  {[5, 10, 15].map((minutes) => (
+                    <option key={minutes} value={minutes}>{minutes}min</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="gap-2 justify-evenly items-center mx-auto">
+                <label className="text-sm font-medium min-w-[4.5rem] gap-2">Auto Start</label>
+              </div>
             </div>
+
           </CardFooter>
         </CardHeader>
       </Card >
