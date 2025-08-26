@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
 import MetadataUpdater from "./MetadataUpdater";
@@ -15,6 +15,8 @@ export default function TimerApp() {
   //this list can manage wheter the timer is runnning or not
   const [isRunning, setIsRunning] = useState(false);
 
+  const [workDuration, setWorkDuration] = useState(25);
+
   //reverse the boolean 
   const handleStart = () => {
     setIsRunning(!isRunning);
@@ -27,7 +29,7 @@ export default function TimerApp() {
   const handleReset = () => {
     setIsRunning(false);
     setTimeLeft({
-      minutes: mode === 'work' ? 25 : 5,
+      minutes: mode === 'work' ? workDuration : 5,
       seconds: 0
     })
   };
@@ -39,12 +41,14 @@ export default function TimerApp() {
     setMode(newMode);
 
     setTimeLeft({
-      minutes: newMode === 'work' ? 25 : 5,
+      minutes: newMode === 'work' ? workDuration : 5,
       seconds: 0,
     })
 
     setIsRunning(false);
   };
+
+
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
     if (isRunning) {
@@ -97,14 +101,31 @@ export default function TimerApp() {
               isRunning={isRunning}
             />
           </CardContent>
+          <CardFooter className="flex justify-center gap-2 items-center ">
+            <label className="text-sm font-medium">working time</label>
+            <select value={workDuration} onChange={(e) => {
+              const newDuration = parseInt(e.target.value);
+              setWorkDuration(newDuration)
+              if (mode === 'work' && !isRunning) {
+                setTimeLeft({ minutes: newDuration, seconds: 0 })
+              }
+              setTimeLeft({ minutes: newDuration, seconds: 0 });
+
+            }}
+            >
+              {[5, 10, 15, 30, 45, 60].map((minutes) => (
+                <option key={minutes} value={minutes}>{minutes}min</option>
+              ))}
+            </select>
+          </CardFooter>
         </CardHeader>
-      </Card>
+      </Card >
       <MetadataUpdater
         minutes={timeLeft.minutes}
         seconds={timeLeft.seconds}
         mode={mode}
 
       />
-    </div>
+    </div >
   )
 }
