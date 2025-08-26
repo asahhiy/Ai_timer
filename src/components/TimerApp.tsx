@@ -11,8 +11,6 @@ import { useReward } from "react-rewards";
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
 
-
-
 export default function TimerApp() {
   const { reward: confetti } = useReward('confettiReward', 'confetti', {
     elementCount: 100,
@@ -164,7 +162,6 @@ export default function TimerApp() {
 
               <div className="gap-2 justify-evenly items-center mx-auto">
                 <label className="text-sm font-medium min-w-[4.5rem] gap-2">Auto Start</label>
-                <Switch checked={autoStart} onCheckedChange={() => setAutoStart(!autoStart)} />
               </div>
             </div>
 
