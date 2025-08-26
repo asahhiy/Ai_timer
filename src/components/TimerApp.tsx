@@ -106,12 +106,13 @@ export default function TimerApp() {
             <select value={workDuration} onChange={(e) => {
               const newDuration = parseInt(e.target.value);
               setWorkDuration(newDuration)
-              if (mode === 'work' && !isRunning) {
+              if (mode === 'work' && isRunning) {
                 setTimeLeft({ minutes: newDuration, seconds: 0 })
+                console.log('mode is work');
               }
-              setTimeLeft({ minutes: newDuration, seconds: 0 });
 
             }}
+              className="p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             >
               {[5, 10, 15, 30, 45, 60].map((minutes) => (
                 <option key={minutes} value={minutes}>{minutes}min</option>
