@@ -1,7 +1,7 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Switch } from "@radix-ui/react-switch";
+import { Switch } from "./ui/switch";
 import TimerDisplay from "./TimerDisplay";
 import Controles from "./Controles";
 import MetadataUpdater from "./MetadataUpdater";
@@ -162,6 +162,7 @@ export default function TimerApp() {
 
               <div className="gap-2 justify-evenly items-center mx-auto">
                 <label className="text-sm font-medium min-w-[4.5rem] gap-2">Auto Start</label>
+                <Switch />
               </div>
             </div>
 
