@@ -13,7 +13,7 @@ export default function RefreshSuggestion({ suggestion, onClose }: RefreshSugges
     if (suggestion) {
       const timer = setTimeout(() => {
         onClose();
-      }, 5000)
+      }, 10000)
       return () => clearTimeout(timer)
     }
 
@@ -24,15 +24,15 @@ export default function RefreshSuggestion({ suggestion, onClose }: RefreshSugges
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-white border-gray-200 p-4 rounded-lg shadow-lg"
+        exit={{ opacity: 0, y: 20 }}
+        className="fixed bottom-3 left-1/2 transform -translate-x-1/2 bg-indigo-100 border-indigo-200 p-4 rounded-lg shadow-lg w-full max-w-md"
       >
         <button onClick={onClose}
-          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+          className="absolute top-3 right-3 text-indigo-400 hover:text-indigo-600 "
         >
           <X size={16} />
         </button>
-        <p className="text-lg font-medium text-gray-700 pr-6">{suggestion}</p>
+        <p className="text-lg font-medium text-gray-700 pr-6 text-center">{suggestion}</p>
 
       </motion.div>
     )}

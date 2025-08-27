@@ -59,8 +59,12 @@ export default function TimerApp() {
       minutes: newMode === 'work' ? workDuration : breakDuration,
       seconds: 0,
     })
-    console.log('newMode:', newMode);
-    console.log('now workDuration:', workDuration, 'breakDuration', breakDuration);
+
+    if (newMode === 'break') {
+      generateRefreshSuggetion()
+        .then((suggestion) => setRefreshSuggestion(suggestion))
+        .catch(console.error)
+    }
     setIsRunning(autoStart);
   };
 
@@ -189,7 +193,7 @@ export default function TimerApp() {
 
       />
       <RefreshSuggestion
-        suggestion={'hoge'}
+        suggestion={refreshSuggestion}
         onClose={() => setRefreshSuggestion(null)}
 
       />
