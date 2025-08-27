@@ -96,7 +96,7 @@ export default function TimerApp() {
           }
           return { ...prev, seconds: prev.seconds - 1 };
         })
-      }, 10);
+      }, 1000);
     }
 
     //cleanup関数
