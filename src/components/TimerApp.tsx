@@ -10,7 +10,7 @@ import { playNotificationSound } from "@/utils/sound";
 import { useReward } from "react-rewards";
 import { generateRefreshSuggetion } from "@/utils/gemini";
 import RefreshSuggestion from './RefreshSuggestion'
-
+import TotalTimerDisplay from './TotalTimerDisplay'
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
 
@@ -23,24 +23,17 @@ export default function TimerApp() {
   })
   //this list can manage wheter the timer is runnning or not
   const [isRunning, setIsRunning] = useState(false);
-
   //working time and break time management
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
-
-
   const [refreshSuggestion, setRefreshSuggestion] = useState<string | null>(null);
-
   const [autoStart, setAutoStart] = useState(false);
   //reverse the boolean 
   const handleStart = () => {
     setIsRunning(!isRunning);
   }
-
   //this content can hold moving time 
   const [timeLeft, setTimeLeft] = useState({ minutes: 25, seconds: 0 });
-
-
   const handleReset = () => {
     setIsRunning(false);
     setTimeLeft({
@@ -48,8 +41,10 @@ export default function TimerApp() {
       seconds: 0
     })
   };
-  const [mode, setMode] = useState<Mode>('work');
 
+  const [totalTime, setTotalTime] = useState({ hours: 0, minutes: 0, seconds: 0 });
+
+  const [mode, setMode] = useState<Mode>('work');
   //this function helps mode switch
   const toggleMode = () => {
     const newMode = mode === 'work' ? 'break' : 'work';
@@ -96,6 +91,19 @@ export default function TimerApp() {
           }
           return { ...prev, seconds: prev.seconds - 1 };
         })
+
+        setTotalTime((prev) => {
+          if (mode === 'work') {
+            if (prev.seconds === 59) {
+              if (prev.minutes === 59) {
+                return { hours: prev.hours + 1, minutes: 0, seconds: 0 }
+              }
+              return { ...prev, minutes: prev.minutes + 1, seconds: 0 };
+            }
+            return { ...prev, seconds: prev.seconds + 1 };
+          }
+          return { ...prev };
+        })
       }, 1000);
     }
 
@@ -110,7 +118,7 @@ export default function TimerApp() {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4 flex-col">
       <span id="confettiReward" className="
         absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
         "/>
@@ -186,6 +194,25 @@ export default function TimerApp() {
           </CardFooter>
         </CardHeader>
       </Card >
+      <div className="w-full max-w-md ">
+        <Card>
+          <CardHeader className="flex text-center flex-col">
+
+            < CardTitle>Total work</CardTitle>
+            <CardContent>
+              <TotalTimerDisplay
+                hours={totalTime.hours}
+                minutes={totalTime.minutes}
+                seconds={totalTime.seconds}
+              />
+            </CardContent>
+          </CardHeader>
+          <CardFooter>
+
+          </CardFooter>
+        </Card>
+      </div>
+
       <MetadataUpdater
         minutes={timeLeft.minutes}
         seconds={timeLeft.seconds}
@@ -197,6 +224,7 @@ export default function TimerApp() {
         onClose={() => setRefreshSuggestion(null)}
 
       />
+
     </div >
   )
 }

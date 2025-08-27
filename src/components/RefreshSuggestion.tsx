@@ -13,7 +13,7 @@ export default function RefreshSuggestion({ suggestion, onClose }: RefreshSugges
     if (suggestion) {
       const timer = setTimeout(() => {
         onClose();
-      }, 10000)
+      }, 7000)
       return () => clearTimeout(timer)
     }
 
