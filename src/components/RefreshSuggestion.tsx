@@ -21,10 +21,19 @@ export default function RefreshSuggestion({ suggestion, onClose }: RefreshSugges
 
   return <AnimatePresence>
     {suggestion && (
-      <motion.div>
-        <button>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        className="fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-white border-gray-200 p-4 rounded-lg shadow-lg"
+      >
+        <button onClick={onClose}
+          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+        >
           <X size={16} />
         </button>
+        <p className="text-lg font-medium text-gray-700 pr-6">{suggestion}</p>
+
       </motion.div>
     )}
   </AnimatePresence>
