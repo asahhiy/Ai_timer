@@ -3,7 +3,7 @@
 export async function generateRefreshSuggetion(): Promise<string> {
   try {
     //call API
-    const response = await fetch('/api/refresh-suggetion')
+    const response = await fetch('/api/refresh-suggestion')
     const data = await response.json();
 
     return data.suggetion
