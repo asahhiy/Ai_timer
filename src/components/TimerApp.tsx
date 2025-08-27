@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { playNotificationSound } from "@/utils/sound";
 import { useReward } from "react-rewards";
 import { generateRefreshSuggetion } from "@/utils/gemini";
+import RefreshSuggestion from './RefreshSuggestion'
 
 //タイマーのモードを表す型
 type Mode = 'work' | 'break';
@@ -27,6 +28,8 @@ export default function TimerApp() {
   const [workDuration, setWorkDuration] = useState(25);
   const [breakDuration, setBreakDuration] = useState(5);
 
+
+  const [refreshSuggestion, setRefreshSuggestion] = useState<string | null>(null);
 
   const [autoStart, setAutoStart] = useState(false);
   //reverse the boolean 
@@ -183,6 +186,11 @@ export default function TimerApp() {
         minutes={timeLeft.minutes}
         seconds={timeLeft.seconds}
         mode={mode}
+
+      />
+      <RefreshSuggestion
+        suggestion={'hoge'}
+        onClose={() => setRefreshSuggestion(null)}
 
       />
     </div >
