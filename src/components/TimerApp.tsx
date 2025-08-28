@@ -114,7 +114,7 @@ export default function TimerApp() {
       }
     }
 
-  }, [isRunning]);
+  }, [isRunning, mode, autoStart, breakDuration]);
 
 
   return (
